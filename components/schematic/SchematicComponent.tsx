@@ -1,4 +1,4 @@
-import getTemporaryAccessToken from '@/actions/getTemporaryAccessToken';
+import { getTemporaryAccessToken } from '@actions/getTemporaryAccessToken';
 import SchematicEmbed from './SchematicEmbed';
 
 async function SchematicComponent({ componentId }: { componentId: string }) {
@@ -6,7 +6,7 @@ async function SchematicComponent({ componentId }: { componentId: string }) {
         return null;
     }
 
-    const accessToken = await getTemporaryAccessToken(componentId);
+    const accessToken = await getTemporaryAccessToken();
 
     if (!accessToken) {
         throw new Error('Failed to get access token for current user');

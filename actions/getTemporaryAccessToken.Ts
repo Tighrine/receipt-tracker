@@ -1,20 +1,19 @@
 'use server';
 
 import { currentUser } from '@clerk/nextjs/server';
-// Initialize Schematic SDK
 import { SchematicClient } from "@schematichq/schematic-typescript-node";
-const apiKey = process.env.SCHEMATIC_API_KEY;
-const client = new SchematicClient({ apiKey });
 
 // Get a temporary access token
-async function getTemporaryAccessToken(companyId: string) {
-
+export async function getTemporaryAccessToken() {
   const user = await currentUser();
 
   if(!user) {
     console.error("User not found");
     return null;
   }
+
+  const apiKey = process.env.NEXT_SCHEMATIC_SECRET_API_KEY;
+  const client = new SchematicClient({ apiKey });
 
   const resp = await client.accesstokens.issueTemporaryAccessToken({
     resourceType: "company",
@@ -23,5 +22,3 @@ async function getTemporaryAccessToken(companyId: string) {
 
   return resp.data?.token;
 }
-
-export default getTemporaryAccessToken;
