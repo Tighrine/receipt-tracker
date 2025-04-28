@@ -1,4 +1,4 @@
-import { getTemporaryAccessToken } from '@/actions/getTempAccessToken';
+import { getTemporaryAccessToken } from '@actions/getTemporaryAccessToken';
 import SchematicEmbed from './SchematicEmbed';
 
 async function SchematicComponent({ componentId }: { componentId: string }) {
