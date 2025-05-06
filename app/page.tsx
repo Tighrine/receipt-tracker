@@ -1,3 +1,4 @@
+import PDFDropzone from '@/components/PDFDropzone';
 import { Button } from '@/components/ui/button';
 import {
     ArrowRight,
@@ -53,7 +54,7 @@ export default function Home() {
                                     dark:border-gray-800 dark:bg-gray-950"
                     >
                         <div className="p-6 md:p-8 relative">
-                            PDF Dropzone goes here...
+                            <PDFDropzone />
                         </div>
                     </div>
                 </div>

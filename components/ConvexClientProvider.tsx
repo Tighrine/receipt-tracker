@@ -8,9 +8,8 @@ import {
     SchematicProvider,
     useSchematicEvents,
 } from '@schematichq/schematic-react';
-const convex = new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 
-console.log('convex', process.env.NEXT_PUBLIC_SCHEMATIC_KEY);
+const convex = new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 
 const SchematicWrapper = ({ children }: { children: ReactNode }) => {
     const { identify } = useSchematicEvents();
