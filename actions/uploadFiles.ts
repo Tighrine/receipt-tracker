@@ -1,9 +1,11 @@
 'use server';
 
 import { api } from "@/convex/_generated/api";
+import { inngest } from "@/inngest/client";
+import { events } from "@/inngest/constants";
 import convex from "@/lib/convexClient";
 import { currentUser } from "@clerk/nextjs/server";
-//import { getFileDownloadUrl } from "./getFileDownloadUrl";
+import { getFileDownloadUrl } from "./getFileDownloadUrl";
 
 export const uploadFiles = async (formData: FormData) => {
     const user = await currentUser();
@@ -40,7 +42,6 @@ export const uploadFiles = async (formData: FormData) => {
         }
 
         const { storageId } = await response.json();
-        //const fileUrl = await getFileDownloadUrl(storageId);
         const receiptId = await convex.mutation(api.receipts.storeReceipt, {
             userId: user.id,
             fileName: file.name,
@@ -48,8 +49,17 @@ export const uploadFiles = async (formData: FormData) => {
             fileId: storageId,
             size: file.size,
         });
+        // get the convex download url for the file
+        const fileUrl = await getFileDownloadUrl(storageId);
 
-        // TODO: trigger inngest agent to process the file...
+        //trigger inngest agent to process the file...
+        await inngest.send({
+            name: events.EXTRACT_DATA_FROM_RECEIPT_AND_SAVE_TO_DATABASE,
+            data: {
+                pdfUrl: fileUrl.downloadUrl,
+                receiptId,
+            }
+        });
 
         return {
             success: true,

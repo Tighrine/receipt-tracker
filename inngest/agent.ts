@@ -1,20 +1,19 @@
 import {
-    anthropic,
     createNetwork,
+    gemini,
     getDefaultRoutingAgent,
 } from '@inngest/agent-kit';
 import { createServer } from '@inngest/agent-kit/server';
 import { inngest } from './client';
 import { events } from './constants';
+import { databaseAgent } from './Agents/database';
+import { receiptScanningAgent } from './Agents/receiptScanner';
 
 const agentNetwork = createNetwork({
     name: 'Receipt Agent',
-    agents: [database, receiptScanner],
-    defaultModel: anthropic({
-        model: 'claude-3-5-sonnet-latest',
-        defaultParameters: {
-            max_tokens: 1000,
-        },
+    agents: [databaseAgent, receiptScanningAgent],
+    defaultModel: gemini({
+        model: 'gemini-1.5-pro',
     }),
 
     defaultRouter: (ctx) => {
@@ -28,13 +27,13 @@ const agentNetwork = createNetwork({
 });
 
 export const receiptServer = createServer({
-    agents: [database, receiptScanner],
+    agents: [databaseAgent, receiptScanningAgent],
     networks: [agentNetwork],
 });
 
 export const extractAndSaveReceipt = inngest.createFunction(
     {
-        id: 'Extract and Save Receipt',
+        id: 'Extract and Save Receipt to database',
     },
     { event: events.EXTRACT_DATA_FROM_RECEIPT_AND_SAVE_TO_DATABASE },
     async ({ event }) => {

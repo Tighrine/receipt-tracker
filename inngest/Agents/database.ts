@@ -7,7 +7,7 @@ import { openai } from 'inngest';
 import { z } from 'zod';
 
 const saveToDatabaseTool = createTool({
-    name: 'Saze to Database',
+    name: 'Save to Database',
     description: 'Saves the given data to convex database.',
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
